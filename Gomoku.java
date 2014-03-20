@@ -76,7 +76,26 @@ public class Gomoku extends JFrame{
           inLine += 1;
       }
       return inLine;
-    }    
-//  return 0;
+    }
+    // Handles west.
+    if(direction == "W"){
+      int inLine = 0;
+      for(int i = 0; column - i >= 0; i++){
+        if(board[row][column - 1].getBackground() == board[row][column].getBackground())
+          inLine += 1;
+      }
+      return inLine;
+    }
+    // Handles northwest.
+    if(direction == "NW"){
+      int inLine = 0;
+      for(int i = 0; (row - i >= 0) && (column - i >= 0); i++){
+        if(board[row - i][column - i].getBackground() == board[row][column].getBackground())
+          inLine += 1;
+      }
+      return inLine;
+    }
+   else
+     return 0;
   }
 }
