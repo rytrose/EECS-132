@@ -1,18 +1,72 @@
-import javax.swing.JFrame;
+/* import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Color;
+*/
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 /** 
  * The game Gomoku, which is a two player game played on a grid,
  * with the winner being the first player to get five of their pieces in a row either
  * horizontally, vertically, or diagonally.
  * @author Ryan Rose
  */
-public class Gomoku extends JFrame{
+public class Gomoku extends JFrame implements ActionListener{
+  // Board for the game.
+  private JButton[][] board;
   // Number of rows of the game.
   private int rows = 0;
   // Number of columns of the game.
   private int columns = 0;
+  // Default height.
+  private int height = 800;
+  // Default width.
+  private int width = 800;
   
+  public static void main(String[] args){}
+  
+  /** 
+   * Creates a default 19 x 19 board.
+   */
+  public Gomoku(){
+    this.rows = 19;
+    this.columns = 19;
+    JPanel panel = new JPanel(new GridLayout(rows, columns));
+    this.board = new JButton[rows][columns];
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        board[i][j] = new JButton();
+        board[i][j].setBackground(Color.green);
+        panel.add(board[i][j]);
+        board[i][j].addActionListener(this);
+      }
+    }
+    this.getContentPane().add(panel, "Center");
+    this.setSize(width, height);
+  }
+  
+  /**
+   * Creates a board with a given number of rows and columns.
+   */ 
+  public Gomoku(int rows, int columns){
+    this.rows = rows;
+    this.columns = columns;
+    JPanel panel = new JPanel(new GridLayout(rows, columns));
+    this.board = new JButton[rows][columns];
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        board[i][j] = new JButton();
+        board[i][j].setBackground(Color.green);
+        panel.add(board[i][j]);
+        board[i][j].addActionListener(this);
+      }
+    }
+    this.getContentPane().add(panel, "Center");
+    this.setSize(width, height);
+  }
+  
+  public void actionPerformed(ActionEvent e) {}
   
   /** 
    * Returns the number of consecutive pieces of the played color in a specified direction. 
