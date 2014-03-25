@@ -25,10 +25,13 @@ public class Gomoku extends JFrame implements ActionListener{
   private int width = 800;
   // Turn number.
   private int turn = 0;
-  // Boolean value if the game has been won.
-  private boolean isWon = false;
   
-  public static void main(String[] args){}
+  public static void main(String[] args){
+    if(args.length != 0)
+      new Gomoku(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+    else
+      new Gomoku();
+  }
   
   /** 
    * Creates a default 19 x 19 board.
@@ -48,6 +51,7 @@ public class Gomoku extends JFrame implements ActionListener{
     }
     this.getContentPane().add(panel, "Center");
     this.setSize(width, height);
+    this.setVisible(true);
   }
   
   /**
@@ -68,34 +72,34 @@ public class Gomoku extends JFrame implements ActionListener{
     }
     this.getContentPane().add(panel, "Center");
     this.setSize(width, height);
+    this.setVisible(true);
   }
   
   public boolean isWon(){
+    boolean isWon = false;
     for(int i = 0; i < board.length; i++){
       for(int j = 0; j < board[0].length; j++){
         if(board[i][j].getBackground() != Color.green){
-          if(this.numberInLine(board, i + 1, j + 1, "N") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "NE") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "E") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "SE") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "S") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "SW") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "W") == 5 ||
-             this.numberInLine(board, i + 1, j + 1, "NW") == 5)
-            return true;
-          else
-            return false;
+          if((this.numberInLine(board, i + 1, j + 1, "N") + 
+              this.numberInLine(board, i + 1, j + 1, "S")) == 6 ||
+             (this.numberInLine(board, i + 1, j + 1, "NE") +
+              this.numberInLine(board, i + 1, j + 1, "SW")) == 6||
+             (this.numberInLine(board, i + 1, j + 1, "E") +
+             this.numberInLine(board, i + 1, j + 1, "W")) == 6 ||
+             (this.numberInLine(board, i + 1, j + 1, "SE") +
+             this.numberInLine(board, i + 1, j + 1, "NW")) == 6)
+            isWon = true;
         }
       }
     }
-    return false;
+    return isWon;
   }
   
   public void actionPerformed(ActionEvent e){
     JButton b = (JButton)e.getSource();
     for(int i = 0; i < board.length; i++){
       for(int j = 0; j < board[0].length; j++){
-        if(b == board[i][j]){
+        if((b == board[i][j]) && (this.isWon() == false) && (board[i][j].getBackground() == Color.green)){
           if(turn % 2 == 0){
             board[i][j].setBackground(Color.black);
             turn += 1;                
