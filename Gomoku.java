@@ -108,6 +108,8 @@ public class Gomoku extends JFrame implements ActionListener{
             board[i][j].setBackground(Color.white);
             turn += 1;
           }
+          if(this.isWon() == true)
+            System.out.println("The game is won!");
         }
       }
     }
