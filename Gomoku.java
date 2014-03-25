@@ -14,7 +14,7 @@ import java.awt.event.*;
  */
 public class Gomoku extends JFrame implements ActionListener{
   // Board for the game.
-  private JButton[][] board;
+  public JButton[][] board;
   // Number of rows of the game.
   private int rows = 0;
   // Number of columns of the game.
@@ -23,6 +23,10 @@ public class Gomoku extends JFrame implements ActionListener{
   private int height = 800;
   // Default width.
   private int width = 800;
+  // Turn number.
+  private int turn = 0;
+  // Boolean value if the game has been won.
+  private boolean isWon = false;
   
   public static void main(String[] args){}
   
@@ -66,7 +70,44 @@ public class Gomoku extends JFrame implements ActionListener{
     this.setSize(width, height);
   }
   
-  public void actionPerformed(ActionEvent e) {}
+  public boolean isWon(){
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        if(board[i][j].getBackground() != Color.green){
+          if(this.numberInLine(board, i + 1, j + 1, "N") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "NE") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "E") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "SE") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "S") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "SW") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "W") == 5 ||
+             this.numberInLine(board, i + 1, j + 1, "NW") == 5)
+            return true;
+          else
+            return false;
+        }
+      }
+    }
+    return false;
+  }
+  
+  public void actionPerformed(ActionEvent e){
+    JButton b = (JButton)e.getSource();
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        if(b == board[i][j]){
+          if(turn % 2 == 0){
+            board[i][j].setBackground(Color.black);
+            turn += 1;                
+          }
+          else{
+            board[i][j].setBackground(Color.white);
+            turn += 1;
+          }
+        }
+      }
+    }
+  }
   
   /** 
    * Returns the number of consecutive pieces of the played color in a specified direction. 
@@ -78,72 +119,77 @@ public class Gomoku extends JFrame implements ActionListener{
    * @return the number of pieces in line
    */
   public int numberInLine(JButton[][] board, int row, int column, String direction){
+    int inLine = 0;
+    if(board[row - 1][column - 1].getBackground() != Color.green){
     // Handles north.
-    if(direction == "N"){
-      int inLine = 0;
-      for(int i = 0; (row - i >= 0) && 
-          (board[row - i][column].getBackground() == board[row][column].getBackground()); i++)
+    if(direction.equals("N")){
+      // int inLine = 0;
+      for(int i = 0; (row - i > 0) && 
+          (board[(row - 1) - i][column - 1].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles northeast.
-    if(direction == "NE"){
-      int inLine = 0;
-      for(int i = 0; (row - i >= 0) && (column + i < board[0].length) && 
-          (board[row - i][column + i].getBackground() == board[row][column].getBackground()); i++)
+    if(direction.equals("NE")){
+      // int inLine = 0;
+      for(int i = 0; (row - i > 0) && (column + i < board[0].length) && 
+          (board[(row - 1) - i][(column - 1)+ i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles east.
-    if(direction == "E"){
-      int inLine = 0;
+    if(direction.equals("E")){
+      // int inLine = 0;
       for(int i = 0; (column + i < board[0].length) &&
-          (board[row][column + 1].getBackground() == board[row][column].getBackground()); i++)
+          (board[row - 1][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles southeast.
-    if(direction == "SE"){
-      int inLine = 0;
+    if(direction.equals("SE")){
+      // int inLine = 0;
       for(int i = 0; (row + i < board.length) && (column + i < board[0].length) &&
-          (board[row + i][column + i].getBackground() == board[row][column].getBackground()); i++)
+          (board[(row - 1) + i][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles south.
-    if(direction == "S"){
-      int inLine = 0;
+    if(direction.equals("S")){
+      // int inLine = 0;
       for(int i = 0; row + i < board.length &&
-          (board[row + i][column].getBackground() == board[row][column].getBackground()); i++)
+          (board[(row - 1) + i][column - 1].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles southwest.
-    if(direction == "SW"){
-      int inLine = 0;
-      for(int i = 0; (row + i < board.length) && (column - i >= 0) &&
-          (board[row + i][column + i].getBackground() == board[row][column].getBackground()); i++)
+    if(direction.equals("SW")){
+      // int inLine = 0;
+      for(int i = 0; (row + i < board.length) && (column - i > 0) &&
+          (board[(row - 1) + i][(column - 1) - i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles west.
-    if(direction == "W"){
-      int inLine = 0;
-      for(int i = 0; column - i >= 0 &&
-          (board[row][column - i].getBackground() == board[row][column].getBackground()); i++)
+    if(direction.equals("W")){
+      // int inLine = 0;
+      for(int i = 0; column - i > 0 &&
+          (board[row - 1][(column - 1) - i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     // Handles northwest.
-    if(direction == "NW"){
-      int inLine = 0;
-      for(int i = 0; (row - i >= 0) && (column - i >= 0) &&
-          (board[row - i][column - i].getBackground() == board[row][column].getBackground()); i++)
+    if(direction.equals("NW")){
+      // int inLine = 0;
+      for(int i = 0; (row - i > 0) && (column - i > 0) &&
+          (board[(row - 1) - i][(column - 1) - i].getBackground() == board[row - 1][column - 1].getBackground()); i++)
         inLine += 1;
       return inLine;
     }
     else
-      return 0;
+      return inLine;
+    }
+    else
+      return inLine;
   }
   
   /** 
@@ -237,7 +283,7 @@ public class Gomoku extends JFrame implements ActionListener{
       else
         return false;
     }
-    // Handels northwest.
+    // Handles northwest.
     if(direction == "NW"){
       int i = 0;
       while((row - i >= 0) && (column - i >= 0) &&
