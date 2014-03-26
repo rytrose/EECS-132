@@ -9,7 +9,7 @@ import java.awt.event.*;
  */
 public class Gomoku extends JFrame implements ActionListener{
   // Board for the game.
-  private JButton[][] board;
+  public JButton[][] board;
   // Number of rows of the game.
   private int rows = 0;
   // Number of columns of the game.
@@ -19,7 +19,7 @@ public class Gomoku extends JFrame implements ActionListener{
   // Default width.
   private int width = 800;
   // Turn number.
-  private int turn = 0;
+  public int turn = 0;
   
   /**
    * Main method which creates a 19 x 19 board if there are no arguments, or a board with the given
@@ -99,7 +99,37 @@ public class Gomoku extends JFrame implements ActionListener{
   }
   
   public boolean isThreeThree(JButton[][] board, int row, int column){
-    return true;
+    boolean isThreeThree = false;
+    boolean isCross = false;
+    if((row > 2) && (row < board.length - 1) && (column > 2) && (column < board[0].length - 1)){
+      if(numberInLine(board, row + 1, column, "N") == 1 &&
+         numberInLine(board, row, column + 1, "E") == 1 &&
+         numberInLine(board, row - 1, column, "S") == 1 &&
+         numberInLine(board, row, column - 1, "W") == 1)
+        isCross = true;
+       else if (numberInLine(board, row + 1, column + 1, "NE") == 1 &&
+         numberInLine(board, row + 1, column - 1, "SE") == 1 && 
+         numberInLine(board, row - 1, column - 1, "SW") == 1 &&
+         numberInLine(board, row - 1, column + 1, "NW") == 1)
+        isCross = true;
+      if(isCross == true){
+        if(isOpen(board, row + 1, column, "N") == true &&
+           isOpen(board, row, column + 1, "E") == true &&
+           isOpen(board, row - 1, column, "S") == true &&
+           isOpen(board, row, column - 1, "W") == true  &&
+           (((board[row - 1][column].getBackground() == Color.black) && turn % 2 == 0) ||
+            (board[row - 1][column].getBackground() == Color.white) && turn % 2 == 1))
+          isThreeThree = true;
+        else if(isOpen(board, row + 1, column + 1, "NE") == true &&
+                isOpen(board, row - 1, column + 1, "SE") == true && 
+                isOpen(board, row - 1, column - 1, "SW") == true &&
+                isOpen(board, row + 1, column - 1, "NW") == true &&
+                (((board[row - 2][column - 2].getBackground() == Color.black) && turn % 2 == 0) ||
+                 (board[row - 2][column - 2].getBackground() == Color.white) && turn % 2 == 1))
+          isThreeThree = true;
+      }
+    }
+    return isThreeThree;
   }
   
   /** 
@@ -109,7 +139,8 @@ public class Gomoku extends JFrame implements ActionListener{
     JButton b = (JButton)e.getSource();
     for(int i = 0; i < board.length; i++){
       for(int j = 0; j < board[0].length; j++){
-        if((b == board[i][j]) && (this.isWon() == false) && (board[i][j].getBackground() == Color.green)){
+        if((b == board[i][j]) && (this.isWon() == false) && (board[i][j].getBackground() == Color.green)
+           && isThreeThree(board, i + 1, j + 1) == false){
           if(turn % 2 == 0){
             board[i][j].setBackground(Color.black);
             turn += 1;                
@@ -221,6 +252,7 @@ public class Gomoku extends JFrame implements ActionListener{
    */
   public boolean isOpen(JButton[][] board, int row, int column, String direction){
     Color green = Color.green;
+    if(board[row - 1][column - 1].getBackground() != Color.green){
     // Handles north.
     if(direction.equals("N")){
       int i = 0;
@@ -311,7 +343,9 @@ public class Gomoku extends JFrame implements ActionListener{
     }
     else 
       return false;
+    }
+    else 
+      return false;
   }
 }
-
   
