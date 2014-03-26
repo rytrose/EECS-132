@@ -98,6 +98,10 @@ public class Gomoku extends JFrame implements ActionListener{
     return isWon;
   }
   
+  public boolean isThreeThree(JButton[][] board, int row, int column){
+    return true;
+  }
+  
   /** 
    * Manages what occurs when a button, or space on the board, is clicked.
    */
@@ -231,7 +235,6 @@ public class Gomoku extends JFrame implements ActionListener{
     // Handles northeast.
     if(direction.equals("NE")){
       int i = 0;
-    //  Color green = new Color
       while((row - i > 0) && (column + i < board[0].length) && 
             (board[(row - 1) - i][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
