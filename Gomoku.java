@@ -1,8 +1,3 @@
-/* import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.Color;
-*/
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +9,7 @@ import java.awt.event.*;
  */
 public class Gomoku extends JFrame implements ActionListener{
   // Board for the game.
-  public JButton[][] board;
+  private JButton[][] board;
   // Number of rows of the game.
   private int rows = 0;
   // Number of columns of the game.
@@ -26,6 +21,10 @@ public class Gomoku extends JFrame implements ActionListener{
   // Turn number.
   private int turn = 0;
   
+  /**
+   * Main method which creates a 19 x 19 board if there are no arguments, or a board with the given
+   * arguments.
+   */
   public static void main(String[] args){
     if(args.length != 0)
       new Gomoku(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -75,6 +74,10 @@ public class Gomoku extends JFrame implements ActionListener{
     this.setVisible(true);
   }
   
+  /** 
+   * Determines if the game has been won.
+   * @return returns true if one player plays exactly five consecutive pieces in any direction 
+   */
   public boolean isWon(){
     boolean isWon = false;
     for(int i = 0; i < board.length; i++){
@@ -95,6 +98,9 @@ public class Gomoku extends JFrame implements ActionListener{
     return isWon;
   }
   
+  /** 
+   * Manages what occurs when a button, or space on the board, is clicked.
+   */
   public void actionPerformed(ActionEvent e){
     JButton b = (JButton)e.getSource();
     for(int i = 0; i < board.length; i++){
@@ -212,46 +218,46 @@ public class Gomoku extends JFrame implements ActionListener{
   public boolean isOpen(JButton[][] board, int row, int column, String direction){
     Color green = Color.green;
     // Handles north.
-    if(direction == "N"){
+    if(direction.equals("N")){
       int i = 0;
-      while(row - i >= 0 &&
-            (board[row - i][column].getBackground() == board[row][column].getBackground()))
+      while(row - i > 0 &&
+            (board[(row - 1) - i][column - 1].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row - i][column].getBackground() == green)
+      if(board[(row - 1) - i][column - 1].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles northeast.
-    if(direction == "NE"){
+    if(direction.equals("NE")){
       int i = 0;
     //  Color green = new Color
-      while((row - i >= 0) && (column + i < board[0].length) && 
-            (board[row - i][column + i].getBackground() == board[row][column].getBackground()))
+      while((row - i > 0) && (column + i < board[0].length) && 
+            (board[(row - 1) - i][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row - i][column + i].getBackground() == green)
+      if(board[(row - 1) - i][(column - 1)+ i].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles east.
-    if(direction == "E"){
+    if(direction.equals("E")){
       int i = 0;
       while((column + i < board[0].length) &&
-            (board[row][column + i].getBackground() == board[row][column].getBackground()))
+            (board[(row - 1)][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row][column + i].getBackground() == green)
+      if(board[row - 1][(column - 1) + i].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles southeast.
-    if(direction == "SE"){
+    if(direction.equals("SE")){
       int i = 0;
       while((row + i < board.length) && (column + i < board[0].length) &&
-            (board[row + 1][column + 1].getBackground() == board[row][column].getBackground()))
+            (board[(row - 1) + i][(column - 1) + i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row + 1][column + 1].getBackground() == green)
+      if(board[(row - 1) + i][(column - 1) + i].getBackground() == green)
         return true;
       else
         return false;
@@ -260,42 +266,42 @@ public class Gomoku extends JFrame implements ActionListener{
     if(direction == "S"){
       int i = 0;
       while(row + i < board.length &&
-            (board[row + i][column].getBackground() == board[row][column].getBackground()))
+            (board[(row - 1) + i][column - 1].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row + i][column].getBackground() == green)
+      if(board[(row - 1) + i][column - 1].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles southwest.
-    if(direction == "SW"){
+    if(direction.equals("SW")){
       int i = 0;
-      while((row + i < board.length) && (column - i >= 0) &&
-            (board[row + i][column].getBackground() == board[row][column].getBackground()))
+      while((row + i < board.length) && (column - i > 0) &&
+            (board[(row - 1) + i][column - 1].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row + i][column].getBackground() == green)
+      if(board[(row - 1) + i][column - 1].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles west.
-    if(direction == "W"){
+    if(direction.equals("W")){
       int i = 0;
-      while(column - i >= 0 &&
-            (board[row][column - i].getBackground() == board[row][column].getBackground()))
+      while(column - i > 0 &&
+            (board[row - 1][(column - 1) - i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row][column - i].getBackground() == green)
+      if(board[row - 1][(column - 1) - i].getBackground() == green)
         return true;
       else
         return false;
     }
     // Handles northwest.
-    if(direction == "NW"){
+    if(direction.equals("NW")){
       int i = 0;
-      while((row - i >= 0) && (column - i >= 0) &&
-            (board[row - i][column - i].getBackground() == board[row][column].getBackground()))
+      while((row - i > 0) && (column - i > 0) &&
+            (board[(row - 1) - i][(column - 1) - i].getBackground() == board[row - 1][column - 1].getBackground()))
         i++;
-      if(board[row - i][column - i].getBackground() == green)
+      if(board[(row - 1) - i][(column - 1) - i].getBackground() == green)
         return true;
       else
         return false;
