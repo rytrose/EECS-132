@@ -220,6 +220,7 @@ public class Gomoku extends JFrame implements ActionListener{
     if(b == restart){
      new Gomoku(rows, columns);
      this.setVisible(false);
+     System.out.println("New game:");
     }
   }
   
