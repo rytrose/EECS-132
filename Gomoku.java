@@ -20,6 +20,8 @@ public class Gomoku extends JFrame implements ActionListener{
   private int width = 800;
   // Turn number.
   public int turn = 0;
+  // Restart button.
+  private JButton restart;
   
   /**
    * Main method which creates a 19 x 19 board if there are no arguments, or a board with the given
@@ -98,32 +100,41 @@ public class Gomoku extends JFrame implements ActionListener{
     return isWon;
   }
   
+  /* 
+   * Identifies a three-three.
+   * @param board  two dimensional array of JButtons used as the board
+   * @param row  row of currently played piece
+   * @param column  column of currently played piece
+   * @param direction  specified direction from currently played piece of either 
+   *        "N", "NE", "E", "SE", "S", "SW", "W", or "NW"
+   * @return returns true if the spot is a three-three
+   */
   public boolean isThreeThree(JButton[][] board, int row, int column){
     boolean isThreeThree = false;
     boolean isCross = false;
     if((row > 2) && (row < board.length - 1) && (column > 2) && (column < board[0].length - 1)){
-      if(numberInLine(board, row + 1, column, "N") == 1 &&
+      if(numberInLine(board, row - 1, column, "N") == 1 &&
          numberInLine(board, row, column + 1, "E") == 1 &&
-         numberInLine(board, row - 1, column, "S") == 1 &&
+         numberInLine(board, row + 1, column, "S") == 1 &&
          numberInLine(board, row, column - 1, "W") == 1)
         isCross = true;
-       else if (numberInLine(board, row + 1, column + 1, "NE") == 1 &&
+       else if (numberInLine(board, row - 1, column + 1, "NE") == 1 &&
          numberInLine(board, row + 1, column - 1, "SE") == 1 && 
-         numberInLine(board, row - 1, column - 1, "SW") == 1 &&
+         numberInLine(board, row + 1, column - 1, "SW") == 1 &&
          numberInLine(board, row - 1, column + 1, "NW") == 1)
         isCross = true;
       if(isCross == true){
-        if(isOpen(board, row + 1, column, "N") == true &&
+        if(isOpen(board, row - 1, column, "N") == true &&
            isOpen(board, row, column + 1, "E") == true &&
-           isOpen(board, row - 1, column, "S") == true &&
+           isOpen(board, row + 1, column, "S") == true &&
            isOpen(board, row, column - 1, "W") == true  &&
            (((board[row - 1][column].getBackground() == Color.black) && turn % 2 == 0) ||
             (board[row - 1][column].getBackground() == Color.white) && turn % 2 == 1))
           isThreeThree = true;
-        else if(isOpen(board, row + 1, column + 1, "NE") == true &&
-                isOpen(board, row - 1, column + 1, "SE") == true && 
-                isOpen(board, row - 1, column - 1, "SW") == true &&
-                isOpen(board, row + 1, column - 1, "NW") == true &&
+        else if(isOpen(board, row - 1, column + 1, "NE") == true &&
+                isOpen(board, row + 1, column + 1, "SE") == true && 
+                isOpen(board, row + 1, column - 1, "SW") == true &&
+                isOpen(board, row - 1, column - 1, "NW") == true &&
                 (((board[row - 2][column - 2].getBackground() == Color.black) && turn % 2 == 0) ||
                  (board[row - 2][column - 2].getBackground() == Color.white) && turn % 2 == 1))
           isThreeThree = true;
@@ -132,6 +143,53 @@ public class Gomoku extends JFrame implements ActionListener{
     return isThreeThree;
   }
   
+  /*
+   * Identifies a four-four.
+   * @param board  two dimensional array of JButtons used as the board
+   * @param row  row of currently played piece
+   * @param column  column of currently played piece
+   * @param direction  specified direction from currently played piece of either 
+   *        "N", "NE", "E", "SE", "S", "SW", "W", or "NW"
+   * @return returns true if a spot is a four-four.
+   */  
+  public boolean isFourFour(JButton[][] board, int row, int column){
+    boolean isFourFour = false;
+    boolean isCross = false;
+    if((row > 3) && (row < board.length - 2) && (column > 3) && (column < board[0].length - 2)){
+      if(numberInLine(board, row - 1, column, "N") == 2 &&
+         numberInLine(board, row, column + 1, "E") == 2 &&
+         numberInLine(board, row + 1, column, "S") == 2 &&
+         numberInLine(board, row, column - 1, "W") == 2)
+        isCross = true;
+       else if (numberInLine(board, row - 1, column + 1, "NE") == 2 &&
+         numberInLine(board, row + 1, column + 1, "SE") == 2 && 
+         numberInLine(board, row + 1, column - 1, "SW") == 2 &&
+         numberInLine(board, row - 1, column - 1, "NW") == 2)
+        isCross = true;
+      if(isCross == true){
+        if(isOpen(board, row - 1, column, "N") == true &&
+           isOpen(board, row, column + 1, "E") == true &&
+           isOpen(board, row + 1, column, "S") == true &&
+           isOpen(board, row, column - 1, "W") == true  &&
+           (((board[row - 1][column].getBackground() == Color.black) && turn % 2 == 0) ||
+            (board[row - 1][column].getBackground() == Color.white) && turn % 2 == 1))
+          isFourFour = true;
+        else if(isOpen(board, row - 1, column + 1, "NE") == true &&
+                isOpen(board, row + 1, column + 1, "SE") == true && 
+                isOpen(board, row + 1, column - 1, "SW") == true &&
+                isOpen(board, row - 1, column - 1, "NW") == true &&
+                (((board[row - 2][column - 2].getBackground() == Color.black) && turn % 2 == 0) ||
+                 (board[row - 2][column - 2].getBackground() == Color.white) && turn % 2 == 1))
+          isFourFour = true;
+      }
+    }
+    return isFourFour;
+  }
+  
+  
+  
+  
+  
   /** 
    * Manages what occurs when a button, or space on the board, is clicked.
    */
@@ -139,8 +197,12 @@ public class Gomoku extends JFrame implements ActionListener{
     JButton b = (JButton)e.getSource();
     for(int i = 0; i < board.length; i++){
       for(int j = 0; j < board[0].length; j++){
+        if((b == board[i][j]) && this.isThreeThree(board, i + 1, j + 1) == true)
+          System.out.println("Three-three, cannot play there!");
+        if((b == board[i][j]) && this.isFourFour(board, i + 1, j + 1) == true)
+          System.out.println("Four-four, cannot play there!");
         if((b == board[i][j]) && (this.isWon() == false) && (board[i][j].getBackground() == Color.green)
-           && isThreeThree(board, i + 1, j + 1) == false){
+             && this.isThreeThree(board, i + 1, j + 1) == false && this.isFourFour(board, i + 1, j + 1) == false){
           if(turn % 2 == 0){
             board[i][j].setBackground(Color.black);
             turn += 1;                
@@ -151,10 +213,29 @@ public class Gomoku extends JFrame implements ActionListener{
           }
           if(this.isWon() == true)
             System.out.println("The game is won!");
-        }
+            this.winGame();
+        } 
       }
     }
+    if(b == restart){
+     new Gomoku(rows, columns);
+     this.setVisible(false);
+    }
   }
+  
+  /* 
+   * Creates a restart button when the game is won. 
+   */
+  public void winGame(){
+    if(this.isWon() == true){
+      restart = new JButton("Restart?");
+      restart.setSize(width, height/rows);
+      this.getContentPane().add(restart, "North");
+      restart.addActionListener(this);
+      this.setSize(width, height + restart.getHeight());
+    }
+  }
+
   
   /** 
    * Returns the number of consecutive pieces of the played color in a specified direction. 
