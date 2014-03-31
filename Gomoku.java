@@ -8,24 +8,39 @@ import java.awt.event.*;
  * @author Ryan Rose
  */
 public class Gomoku extends JFrame implements ActionListener{
-  // Board for the game.
-  public JButton[][] board;
-  // Number of rows of the game.
+  /** 
+   * Board for the game.
+   */
+  private JButton[][] board;
+  /**
+   * Number of rows of the game.
+   */
   private int rows = 0;
-  // Number of columns of the game.
+  /**
+   * Number of columns of the game.
+   */
   private int columns = 0;
-  // Default height.
+  /**
+   * Default height.
+   */
   private int height = 800;
-  // Default width.
+  /**
+   * Default width.
+   */
   private int width = 800;
-  // Turn number.
-  public int turn = 0;
-  // Restart button.
+  /**
+   * Turn number.
+   */
+  private int turn = 0;
+  /**
+   * Restart button.
+   */
   private JButton restart;
   
   /**
    * Main method which creates a 19 x 19 board if there are no arguments, or a board with the given
    * arguments.
+   * @exception Gomoku catches inputs that are not ints
    */
   public static void main(String[] args){
     if(args.length != 0){
@@ -112,13 +127,11 @@ public class Gomoku extends JFrame implements ActionListener{
     return isWon;
   }
   
-  /* 
+  /** 
    * Identifies a three-three.
    * @param board  two dimensional array of JButtons used as the board
    * @param row  row of currently played piece
    * @param column  column of currently played piece
-   * @param direction  specified direction from currently played piece of either 
-   *        "N", "NE", "E", "SE", "S", "SW", "W", or "NW"
    * @return returns true if the spot is a three-three
    */
   public boolean isThreeThree(JButton[][] board, int row, int column){
@@ -155,13 +168,11 @@ public class Gomoku extends JFrame implements ActionListener{
     return isThreeThree;
   }
   
-  /*
+  /**
    * Identifies a four-four.
    * @param board  two dimensional array of JButtons used as the board
    * @param row  row of currently played piece
    * @param column  column of currently played piece
-   * @param direction  specified direction from currently played piece of either 
-   *        "N", "NE", "E", "SE", "S", "SW", "W", or "NW"
    * @return returns true if a spot is a four-four.
    */  
   public boolean isFourFour(JButton[][] board, int row, int column){
@@ -236,7 +247,7 @@ public class Gomoku extends JFrame implements ActionListener{
     }
   }
   
-  /* 
+  /** 
    * Creates a restart button when the game is won. 
    */
   public void winGame(){
@@ -431,7 +442,7 @@ public class Gomoku extends JFrame implements ActionListener{
       return false;
     }
     else 
-      return false;
+      return true;
   }
 }
   
