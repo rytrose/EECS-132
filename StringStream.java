@@ -4,10 +4,15 @@
  */
 public class StringStream implements Stream<String>{
   
-  /*
+  /**
    * Holds the current value of the stream.
    */
   private String value;
+  
+  /**
+   * Marks if the stream is at the start.
+   */ 
+  private boolean isStart = true;
   
   /**
    * Constructor that takes a starting string.
@@ -24,10 +29,25 @@ public class StringStream implements Stream<String>{
   
   /**
    * Returns the current value the stream is at.
-   * @returns returns the current value of the stream
+   * @return returns the current value of the stream
    */
   public String getValue(){
     return this.value;
+  }
+  
+  /**
+   * Returns the start status of the stream. 
+   * @return returns the start status of the stream
+   */
+  public boolean getStart(){
+    return this.isStart;
+  }
+  
+  /**
+   * Sets the start status of the stream.
+   */
+  public void setStart(boolean b){
+    this.isStart = b;
   }
   
   /**
@@ -40,10 +60,14 @@ public class StringStream implements Stream<String>{
   
   /**
    * Returns the next value in the stream.
-   * @returns returns the next value in the stream
+   * @return returns the next value in the stream
    */
   public String next(){
     StringBuilder s = new StringBuilder();
+    if(this.getStart()){
+      this.setStart(false);
+      return this.getValue();
+    }
     s.append(this.getValue());
     // If empty string, return "a".
     if(this.getValue().equals("")){
@@ -67,7 +91,7 @@ public class StringStream implements Stream<String>{
   
   /**
    * Helper method that checks the previous letter when the next() function reaches a 'z'.
-   * @returns returns the properly incremented string
+   * @return returns the properly incremented string
    */
   private String checkBack(String string){
     StringBuilder s = new StringBuilder();

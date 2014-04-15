@@ -10,11 +10,25 @@ public class IntegerStream implements Stream<Integer>{
   private int value;
   
   /**
+   * Holds where the stream started.
+   */ 
+  private int start;
+  
+  /**
    * Constructor that takes a starting integer.
    * @param start starting integer value
    */
   public IntegerStream(int start){
     this.value = start;
+    this.start = start;
+  }
+  
+  /**
+   * Gets the value where the stream started.
+   * @return returns where the stream started
+   */
+  public int getStart(){
+    return this.start;
   }
   
   /**
@@ -37,7 +51,14 @@ public class IntegerStream implements Stream<Integer>{
    * Returns the next value in the stream.
    */
   public Integer next(){
-    this.setValue(this.getValue() + 1);
-    return this.getValue();
+    if(this.getValue() == this.getStart()){
+      this.setValue(this.getValue() + 1);
+      return this.getStart();
+    }
+    else{
+      int save = this.getValue();
+      this.setValue(this.getValue() + 1);
+      return save;
+    }
   }
 }
